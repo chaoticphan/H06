@@ -25,9 +25,21 @@ public final class TaxCalculator {
      * @return the tax to be paid in Euros
      */
     @StudentImplementationRequired("H6.5")
-    public static double calculateTax(/*FuelPowered device, */ double liters) {
+    public static double calculateTax(FuelPowered device,  double liters) {
         // TODO H6.5
-        return crash("H6.5");
+        double cost;
+        double tax = 0.2;
+        if(device instanceof HybridPowered) {
+            tax *= ((HybridPowered) device).getFuelElectricityRatio();
+        }
+        if(device.getFuelType() == FuelType.GASOLINE){
+            cost = 1.72;
+        }else if(device.getFuelType() == FuelType.DIESEL){
+            cost = 1.6;
+        }else{
+            cost = 1.05;
+        }
+        return cost*liters*tax;
     }
 
 }

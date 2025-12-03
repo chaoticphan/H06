@@ -3,12 +3,10 @@ package h06;
 import org.tudalgo.algoutils.student.annotation.DoNotTouch;
 import org.tudalgo.algoutils.student.annotation.StudentImplementationRequired;
 
-import static org.tudalgo.algoutils.student.Student.crash;
-
 /**
  * A fuel powered chainsaw
  */
-public class Chainsaw {
+public class Chainsaw implements FuelPowered {
 
     @DoNotTouch
     private boolean motorRunning;
@@ -16,6 +14,7 @@ public class Chainsaw {
     private int attempts;
     @DoNotTouch
     private Wood[] remainingWood;
+
 
     /**
      * Creates a new Chainsaw
@@ -84,7 +83,18 @@ public class Chainsaw {
     @StudentImplementationRequired("H6.4.1")
     public void sawWood(int duration) {
         // TODO H6.4.1
-        crash("H6.4.1");
+        if(getRemainingWood() ==0 || !isMotorRunning()) {return;}
+        Wood currWood = remainingWood[0];
+        double cutting  = duration/currWood.strength;
+        if (cutting>=currWood.cuttingDepth) {
+           Wood[] newWood = new Wood[remainingWood.length -1];
+           for(int i=1; i<remainingWood.length; i++){
+               newWood[i-1] = remainingWood[i];
+           }
+           remainingWood = newWood;
+        }else{
+            currWood.cuttingDepth-=cutting;
+        }
     }
 
     /**
@@ -93,5 +103,10 @@ public class Chainsaw {
     @DoNotTouch
     public int getRemainingWood() {
         return remainingWood.length;
+    }
+
+    @Override
+    public FuelType getFuelType() {
+        return FuelType.GASOLINE;
     }
 }

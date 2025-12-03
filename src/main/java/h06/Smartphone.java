@@ -8,12 +8,13 @@ import static org.tudalgo.algoutils.student.Student.crash;
 /**
  * A smartphone with an electric battery
  */
-public class Smartphone {
+public class Smartphone implements ElectricallyPowered {
 
     @DoNotTouch
     private final TokenDictionary tokenDictionary;
     @DoNotTouch
     private final MessageReceiver messageReceiver;
+
 
     /**
      * Creates a new Smartphone
@@ -37,7 +38,23 @@ public class Smartphone {
     @StudentImplementationRequired("H6.4.2")
     public String replaceToken(String template) {
         // TODO H6.4.2
-        return crash("H6.4.2");
+        int firstIdx = template.indexOf('<');
+        int secondIdx = template.indexOf('>');
+        String token = template.substring(firstIdx , secondIdx+1);
+        String replacement = tokenDictionary.lookup(token);
+        return template.replace(token, replacement);
     }
 
+    @Override
+    public void use(int duration) {
+        for(int i = 1; i<=duration; i++){
+            String currMessage = messageReceiver.nextMessage();
+            System.out.println(replaceToken(currMessage));
+        }
+    }
+
+    @Override
+    public PlugType getSupportedPlugType() {
+        return PlugType.USB;
+    }
 }
